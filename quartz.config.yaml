@@ -6,7 +6,7 @@ configuration:
   enablePopovers: true
   analytics: null
   locale: zh-CN
-  baseUrl: ixbwer.github.io/obsidian-blog
+  baseUrl: ixbwer.github.io
   ignorePatterns:
     - private
     - templates
