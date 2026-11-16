@@ -75,137 +75,137 @@ Host 和 Controller 之间通过 HCI（Host Controller Interface） 通信，这
 
 ### 表二：LL（链路层）知识点（Vol 6, Part B + Vol 3 + Vol 4）
 
-| # | 知识点 | 规范出处 | 本系列已覆盖 |
-|---|--------|----------|:----------:|
-| | **§1 — 通用描述** | | |
-| 1 | LL 概述与设备角色（Advertiser / Scanner / Initiator / Master / Slave） | Part B, §1.1 | ☑ (0-1, 2-1) |
-| 2 | 比特序（LSB First on air） | Part B, §1.2 | ☐ |
-| 3 | 设备地址类型：Public / Random Static / RPA / NRPA | Part B, §1.3 | ☑ (1-2 部分) |
-| 4 | 物理信道（Advertising / Data / Periodic Physical Channel） | Part B, §1.4 | ☑ (1-2, 4-3 部分) |
-| | **§2.3 — 广播信道 PDU** | | |
-| 5 | 广播 PDU 类型：ADV_IND / ADV_DIRECT_IND / ADV_NONCONN_IND / ADV_SCAN_IND | Part B, §2.3.1 | ☑ (1-2, 2-1) |
-| 6 | ADV_IND 广播帧格式（Header + AdvA + AdvData） | Part B, §2.3.1.1 | ☑ (1-2) |
-| 7 | AD Structure 格式（Length-Type-Value） | CSS, Part A | ☑ (1-2) |
-| 8 | SCAN_REQ 格式（ScanA + AdvA, 固定 12 字节） | Part B, §2.3.2.1 | ☑ (2-1) |
-| 9 | SCAN_RSP 格式（ScanRspData, 最多 31 字节） | Part B, §2.3.2.2 | ☑ (2-1) |
-| 10 | CONNECT_IND 格式与参数：InitA, AdvA, LLData | Part B, §2.3.3.1 | ☑ (3-1) |
-| 11 | 身份类字段：AA（私有接入地址）、CRCInit | Part B, §2.3.3.1 | ☑ (3-1) |
-| 12 | 时间类字段：WinSize, WinOffset, Interval, Latency, Timeout | Part B, §2.3.3.1 | ☑ (3-1) |
-| 13 | 频率类字段：ChM, Hop, SCA | Part B, §2.3.3.1 | ☑ (3-1) |
-| 14 | **扩展广播 PDU**（ADV_EXT_IND, AUX_ADV_IND, AUX_SYNC_IND 等） | Part B, §2.3.4 (BLE 5.0) | ☐ |
-| 15 | **Common Extended Advertising Payload Format**（AdvMode, Header fields） | Part B, §2.3.4.1 (BLE 5.0) | ☐ |
-| | **§2.4 — 数据信道 PDU** | | |
-| 16 | 数据信道 PDU Header：LLID, NESN, SN, MD, Length | Part B, §2.4 | ☑ (6-1) |
-| 17 | LL Data PDU 格式（LLID=01 Continuation / LLID=10 Start） | Part B, §2.4.1 | ☑ (6-1, 6-2) |
-| 18 | LL Control PDU 格式与 Opcode 枚举（LLID=11） | Part B, §2.4.2 | ☑ (6-1 部分) |
-| 19 | Empty PDU（空包 ACK, LLID=01, Len=0） | Part B, §2.4.2.4 | ☑ (6-1) |
-| | **§4.2 — 链路层状态机** | | |
-| 20 | LL 状态机总览（Standby / Advertising / Scanning / Initiating / Connection / Synchronization） | Part B, §4.2 | ☑ (1-2, 2-1, 4-1 隐含) |
-| 21 | 状态机合法转移路径与多状态组合（BLE 4.1+） | Part B, §4.2 | ☐ |
-| | **§4.3 — 设备过滤** | | |
-| 22 | 白名单（White List / Filter Accept List） | Part B, §4.3.1 | ☐ |
-| 23 | 广播/扫描/发起过滤策略（Filter Policy） | Part B, §4.3.2 | ☐ |
-| | **§4.4 — 广播态与扫描态** | | |
-| 24 | 广播间隔（advInterval, 20 ms – 10.24 s） | Part B, §4.4.2 | ☑ (1-2) |
-| 25 | 广播信道轮询（37→38→39 逐信道发送） | Part B, §4.4.2 | ☑ (1-2) |
-| 26 | 广播随机延迟（advDelay, 0–10 ms） | Part B, §4.4.2 | ☐ |
-| 27 | **多广播集（Multiple Advertising Sets）** | Part B, §4.4.2 (BLE 5.0) | ☐ |
-| 28 | 被动扫描（Passive Scanning） | Part B, §4.4.3.1 | ☑ (2-1) |
-| 29 | 主动扫描（Active Scanning）：三包握手 ADV_IND→SCAN_REQ→SCAN_RSP | Part B, §4.4.3.2 | ☑ (2-1) |
-| 30 | 扫描参数（scanInterval, scanWindow） | Part B, §4.4.3 | ☐ |
-| 31 | 发起态（Initiating State）：监听 ADV_IND 后发送 CONNECT_IND | Part B, §4.4.4 | ☑ (3-1 隐含) |
-| 32 | **扩展广播态（Extended Advertising State）**：Primary + Secondary ADV | Part B, §4.4.2 (BLE 5.0) | ☐ |
-| 33 | **周期性广播（Periodic Advertising）** | Part B, §4.4.5 (BLE 5.0) | ☐ |
-| | **§4.5 — 连接态** | | |
-| 34 | Transmit Window（首次连接事件的接收窗口） | Part B, §4.5 | ☑ (4-1) |
-| 35 | 连接事件（Connection Event）定义：Master 先发、Slave 后回 | Part B, §4.5.1 | ☑ (4-1) |
-| 36 | 锚点（Anchor Point）定义与捕获（硬件 PPI 时间戳） | Part B, §4.5.1 | ☑ (4-1, 4-2) |
-| 37 | connEventCounter（16-bit 回绕计数器） | Part B, §4.5.1 | ☑ (4-2, 8-1) |
-| 38 | connInterval（连接间隔, 7.5 ms – 4 s） | Part B, §4.5.1 | ☑ (3-1, 4-1) |
-| 39 | Supervision Timeout（超时断连, 100 ms – 32 s） | Part B, §4.5.2 | ☑ (3-1) |
-| 40 | Slave Latency（跳过连接事件的低功耗策略） | Part B, §4.5.2 | ☑ (7-1) |
-| 41 | 关闭连接事件的规则（Closing a Connection Event） | Part B, §4.5.3 | ☑ 10-1 |
-| 42 | Transmit Window Narrowing（窗口收窄） | Part B, §4.5.4 | ☐ |
-| 43 | Window Widening（窗口拓宽, 晶振漂移补偿） | Part B, §4.5.7 | ☑ (5-1) |
-| 44 | SCA（Sleep Clock Accuracy）等级与 ppm 换算 | Part B, §4.5.7 | ☑ (5-1) |
-| 45 | Channel Map（信道图）：5 字节 / 40-bit 标记可用信道 | Part B, §4.5.8 | ☑ (4-3) |
-| 46 | **CSA#1 跳频算法**（Hop increment, UnmappedCh mod 37, Remapping） | Part B, §4.5.8.1 | ☑ (4-3) |
-| 47 | **CSA#2 跳频算法**（基于 AES 的伪随机序列） | Part B, §4.5.8.2 (BLE 5.0) | ☐ |
-| 48 | SN/NESN：1-bit Stop-and-Wait ARQ 可靠传输 | Part B, §4.5.9 | ☑ (6-1) |
-| 49 | MD（More Data）位：同一连接事件内多包传输 | Part B, §4.5.9.3 | ☑ (6-1) |
-| 50 | **Data Length Extension (DLE)**：单包最大 251 字节 | Part B, §4.5.10 (BLE 4.2) | ☑ (6-2 提及) |
-| | **§4.6 — 同步态（BLE 5.0）** | | |
-| 51 | **同步态（Synchronization State）**：周期性广播接收方的同步建立与维持 | Part B, §4.6 (BLE 5.0) | ☐ |
-| | **§5 — LL Control Procedures** | | |
-| 52 | Instant 机制（16-bit connEventCounter 对齐生效） | Part B, §5.1.1 | ☑ (8-1) |
-| 53 | LL_CONNECTION_UPDATE_IND（连接参数在线更新） | Part B, §5.1.1 | ☑ (8-1) |
-| 54 | LL_CHANNEL_MAP_IND（信道图在线更新） | Part B, §5.1.2 | ☑ (8-1) |
-| 55 | LL_ENC_REQ / LL_ENC_RSP / LL_START_ENC（链路加密启动 AES-CCM） | Part B, §5.1.3 | ☑ (13-1) |
-| 56 | LL_PAUSE_ENC_REQ / LL_PAUSE_ENC_RSP（暂停加密） | Part B, §5.1.3 | ☐ |
-| 57 | LL_FEATURE_REQ / LL_FEATURE_RSP（特性协商） | Part B, §5.1.4 | ☑ (6-1 提及) |
-| 58 | LL_SLAVE_FEATURE_REQ（Slave 发起的特性协商，BLE 4.1+） | Part B, §5.1.4 | ☐ |
-| 59 | LL_REJECT_IND / LL_REJECT_EXT_IND（过程拒绝） | Part B, §5.1.5 | ☑ (11-1) |
-| 60 | LL_TERMINATE_IND（链路层断连） | Part B, §5.1.6 | ☑ (11-1) |
-| 61 | LL_CONNECTION_PARAM_REQ / RSP（Slave 发起参数更新） | Part B, §5.1.7.1 (BLE 4.1) | ☑ (11-1) |
-| 62 | LL_PING_REQ / LL_PING_RSP（认证超时监控） | Part B, §5.1.7.2 (BLE 4.1) | ☐ |
-| 63 | LL_VERSION_IND（版本交换） | Part B, §5.1.8 | ☑ (6-1 提及) |
-| 64 | LL_LENGTH_REQ / LL_LENGTH_RSP（数据长度协商, DLE） | Part B, §5.1.9 (BLE 4.2) | ☑ (6-1 提及) |
-| 65 | LL_PHY_REQ / LL_PHY_RSP / LL_PHY_UPDATE_IND（PHY 切换） | Part B, §5.1.10 (BLE 5.0) | ☐ |
-| 66 | LL_MIN_USED_CHANNELS_IND（最少信道数指示） | Part B, §5.1.11 (BLE 5.0) | ☐ |
-| | **Vol 6, Part B §6 — 链路层安全** | | |
-| 67 | 加密引擎（AES-128 CCM）与 MIC 生成/校验 | Part B, §6 | ☑ (13-1) |
-| 68 | 会话密钥分发（SKD / IV / LTK） | Part B, §6 | ☑ (13-1) |
-| | **Vol 6, Part B §7 — LL 隐私（Privacy）** | | |
-| 69 | 可解析私有地址（RPA）生成与解析 | Part B, §7 (BLE 4.2) | ☐ |
-| 70 | 地址解析列表（Resolving List）与 Controller 端隐私 | Part B, §7 (BLE 4.2) | ☐ |
-| | **Vol 3, Part A — L2CAP** | | |
-| 71 | L2CAP CID 多路复用（ATT=0x0004, SMP=0x0006, Signaling=0x0005） | Vol 3, Part A, §2.1 | ☑ (6-2) |
-| 72 | L2CAP Basic Frame 分片与重组（LLID Start/Continue） | Vol 3, Part A, §3 | ☑ (6-2) |
-| 73 | L2CAP Signaling Channel（参数更新请求等） | Vol 3, Part A, §4 | ☑ (12-1) |
-| 74 | LE Credit Based Flow Control（基于信用的流控，BLE 4.2+） | Vol 3, Part A, §10.2 (BLE 4.2) | ☐ |
-| | **Vol 4, Part A — HCI 传输层** | | |
-| 75 | HCI 分层：Command / Event / ACL Data | Vol 4, Part A | ☑ (9-1) |
-| 76 | H4 传输协议（UART Packet Indicator） | Vol 4, Part A, §2 | ☑ (9-1) |
-| 77 | H5（Three-Wire）传输协议（可靠重传 + 链路管理） | Vol 4, Part D | ☐ |
-| 78 | HCI USB 传输 | Vol 4, Part B | ☐ |
-| | **Vol 4, Part E — HCI 功能规范** | | |
-| 79 | HCI Command 格式（OpCode = OGF\|OCF, Param Length） | Vol 4, Part E, §5 | ☑ (9-1) |
-| 80 | HCI ACL Data 格式（Handle, PB Flag, BC Flag） | Vol 4, Part E, §5.4.2 | ☑ (9-2) |
-| 81 | HCI Event 格式（Command Complete, Command Status） | Vol 4, Part E, §7.7 | ☑ (9-1) |
-| 82 | LE Meta Event（广播报告、连接完成等） | Vol 4, Part E, §7.7.65 | ☑ (9-3 部分) |
-| 83 | HCI ACL ↔ LL Data PDU 桥接（PB Flag ↔ LLID 映射） | 实现层 | ☑ (9-2) |
-| 84 | HCI 初始化序列（Reset → Read Version → LE Read Buffer Size → …） | Vol 4, Part E | ☑ (9-3) |
-| 85 | HCI LE 命令集（Set Advertising / Scan / Create Connection 等） | Vol 4, Part E, §7.8 | ☑ (9-3 部分) |
-| | **Vol 3, Part H — SMP（安全管理协议）** | | |
-| 86 | SMP 运行在 L2CAP CID=0x0006 上，Pairing Feature Exchange | Part H, §3.3 | ☑ (14-1) |
-| 87 | LE Legacy Pairing：Confirm / Random 交换（TK=0，Just Works） | Part H, §2.3.5.5 | ☑ (14-1) |
-| 88 | c1 / s1 密码学函数（基于 AES-128 的 confirm / STK 生成） | Part H, §2.2 | ☑ (14-1) |
-| 89 | 密钥分发阶段：Encryption Information + Master Identification（LTK/EDIV/Rand） | Part H, §3.6 | ☑ (14-1) |
-| 90 | LE Secure Connections Pairing（基于 ECDH，BLE 4.2+） | Part H, §2.3.5.6 | ☐ |
-| | **Vol 3, Part F — ATT（属性协议）** | | |
-| 91 | ATT 运行在 L2CAP CID=0x0004，客户端-服务端请求-应答模型 | Part F, §3 | ☑ (15-1) |
-| 92 | Attribute：Handle / Type UUID / Permission / Value 四要素 | Part F, §3.1 | ☑ (15-1) |
-| 93 | Exchange MTU Request/Response（默认 MTU=23） | Part F, §3.4.2 | ☑ (15-1) |
-| 94 | Find Information Request/Response（Descriptor 发现） | Part F, §3.4.3 | ☑ (15-1) |
-| 95 | Read By Type Request/Response（Characteristic 发现，uuid=0x2803） | Part F, §3.4.4 | ☑ (15-1) |
-| 96 | Read By Group Type Request/Response（Service 发现，uuid=0x2800） | Part F, §3.4.10 | ☑ (15-1) |
-| 97 | Read Request/Response | Part F, §3.4.4 | ☑ (15-1) |
-| 98 | Write Request/Response：四级检查（Handle/权限/缓冲区/长度） | Part F, §3.4.5 | ☑ (16-1) |
-| 99 | Handle Value Notification（opcode=0x1B，无需 Client 确认） | Part F, §3.4.7 | ☑ (16-1) |
-| 100 | Handle Value Indication / Confirmation（需要 Client 确认） | Part F, §3.4.7 | ☐ |
-| 101 | Error Response（opcode=0x01，含原始 opcode + handle + error code） | Part F, §3.4.1 | ☑ (15-1) |
-| | **Vol 3, Part G — GATT（通用属性规范）** | | |
-| 102 | GATT 层级：Service → Characteristic → Descriptor | Part G, §3 | ☑ (16-1) |
-| 103 | Primary Service Declaration（uuid=0x2800）与 Service handle range | Part G, §3.1 | ☑ (16-1) |
-| 104 | Characteristic Declaration（uuid=0x2803）：Properties / Value Handle / UUID | Part G, §3.3.1 | ☑ (16-1) |
-| 105 | CCC Descriptor（uuid=0x2902）：Notification/Indication 开关 | Part G, §3.3.3.3 | ☑ (16-1) |
-| 106 | Characteristic Properties 位图（Read=0x02, Write=0x08, Notify=0x10） | Part G, §3.3.1.1 | ☑ (16-1) |
-| 107 | GATT Server 必备服务：GAP (0x1800) + GATT (0x1801) | Part G, §7 | ☑ (15-1, 16-1) |
-| 108 | Service Discovery 流程（Read By Group Type → Read By Type → Find Info） | Part G, §4.4 | ☑ (15-1, 16-1) |
-| | **实现层 — 调度与系统** | | |
-| 86 | 精确锚点触发：Compare Match + PPI 硬件路径 | 实现层 | ☑ (4-2) |
-| 87 | 调度器冲突与优先级仲裁（固定优先级 / EDF） | 实现层 | ☑ (5-2) |
-| 88 | WinOffset 前瞻规划（避免锚点冲突） | Part B, §4.5 | ☑ (5-2) |
+| #   | 知识点                                                                                    | 规范出处                           |        本系列已覆盖        |
+| --- | -------------------------------------------------------------------------------------- | ------------------------------ | :------------------: |
+|     | **§1 — 通用描述**                                                                          |                                |                      |
+| 1   | LL 概述与设备角色（Advertiser / Scanner / Initiator / Master / Slave）                          | Part B, §1.1                   |     ☑ (0-1, 2-1)     |
+| 2   | 比特序（LSB First on air）                                                                  | Part B, §1.2                   |          ☐           |
+| 3   | 设备地址类型：Public / Random Static / RPA / NRPA                                             | Part B, §1.3                   |      ☑ (1-2 部分)      |
+| 4   | 物理信道（Advertising / Data / Periodic Physical Channel）                                   | Part B, §1.4                   |   ☑ (1-2, 4-3 部分)    |
+|     | **§2.3 — 广播信道 PDU**                                                                    |                                |                      |
+| 5   | 广播 PDU 类型：ADV_IND / ADV_DIRECT_IND / ADV_NONCONN_IND / ADV_SCAN_IND                    | Part B, §2.3.1                 |     ☑ (1-2, 2-1)     |
+| 6   | ADV_IND 广播帧格式（Header + AdvA + AdvData）                                                 | Part B, §2.3.1.1               |       ☑ (1-2)        |
+| 7   | AD Structure 格式（Length-Type-Value）                                                     | CSS, Part A                    |       ☑ (1-2)        |
+| 8   | SCAN_REQ 格式（ScanA + AdvA, 固定 12 字节）                                                    | Part B, §2.3.2.1               |       ☑ (2-1)        |
+| 9   | SCAN_RSP 格式（ScanRspData, 最多 31 字节）                                                     | Part B, §2.3.2.2               |       ☑ (2-1)        |
+| 10  | CONNECT_IND 格式与参数：InitA, AdvA, LLData                                                  | Part B, §2.3.3.1               |       ☑ (3-1)        |
+| 11  | 身份类字段：AA（私有接入地址）、CRCInit                                                               | Part B, §2.3.3.1               |       ☑ (3-1)        |
+| 12  | 时间类字段：WinSize, WinOffset, Interval, Latency, Timeout                                   | Part B, §2.3.3.1               |       ☑ (3-1)        |
+| 13  | 频率类字段：ChM, Hop, SCA                                                                    | Part B, §2.3.3.1               |       ☑ (3-1)        |
+| 14  | **扩展广播 PDU**（ADV_EXT_IND, AUX_ADV_IND, AUX_SYNC_IND 等）                                 | Part B, §2.3.4 (BLE 5.0)       |          ☐           |
+| 15  | **Common Extended Advertising Payload Format**（AdvMode, Header fields）                 | Part B, §2.3.4.1 (BLE 5.0)     |          ☐           |
+|     | **§2.4 — 数据信道 PDU**                                                                    |                                |                      |
+| 16  | 数据信道 PDU Header：LLID, NESN, SN, MD, Length                                             | Part B, §2.4                   |       ☑ (6-1)        |
+| 17  | LL Data PDU 格式（LLID=01 Continuation / LLID=10 Start）                                   | Part B, §2.4.1                 |     ☑ (6-1, 6-2)     |
+| 18  | LL Control PDU 格式与 Opcode 枚举（LLID=11）                                                  | Part B, §2.4.2                 |      ☑ (6-1 部分)      |
+| 19  | Empty PDU（空包 ACK, LLID=01, Len=0）                                                      | Part B, §2.4.2.4               |       ☑ (6-1)        |
+|     | **§4.2 — 链路层状态机**                                                                      |                                |                      |
+| 20  | LL 状态机总览（Standby / Advertising / Scanning / Initiating / Connection / Synchronization） | Part B, §4.2                   | ☑ (1-2, 2-1, 4-1 隐含) |
+| 21  | 状态机合法转移路径与多状态组合（BLE 4.1+）                                                              | Part B, §4.2                   |          ☐           |
+|     | **§4.3 — 设备过滤**                                                                        |                                |                      |
+| 22  | 白名单（White List / Filter Accept List）                                                   | Part B, §4.3.1                 |          ☐           |
+| 23  | 广播/扫描/发起过滤策略（Filter Policy）                                                            | Part B, §4.3.2                 |          ☐           |
+|     | **§4.4 — 广播态与扫描态**                                                                     |                                |                      |
+| 24  | 广播间隔（advInterval, 20 ms – 10.24 s）                                                     | Part B, §4.4.2                 |       ☑ (1-2)        |
+| 25  | 广播信道轮询（37→38→39 逐信道发送）                                                                 | Part B, §4.4.2                 |       ☑ (1-2)        |
+| 26  | 广播随机延迟（advDelay, 0–10 ms）                                                              | Part B, §4.4.2                 |          ☐           |
+| 27  | **多广播集（Multiple Advertising Sets）**                                                    | Part B, §4.4.2 (BLE 5.0)       |          ☐           |
+| 28  | 被动扫描（Passive Scanning）                                                                 | Part B, §4.4.3.1               |       ☑ (2-1)        |
+| 29  | 主动扫描（Active Scanning）：三包握手 ADV_IND→SCAN_REQ→SCAN_RSP                                   | Part B, §4.4.3.2               |       ☑ (2-1)        |
+| 30  | 扫描参数（scanInterval, scanWindow）                                                         | Part B, §4.4.3                 |          ☐           |
+| 31  | 发起态（Initiating State）：监听 ADV_IND 后发送 CONNECT_IND                                       | Part B, §4.4.4                 |      ☑ (3-1 隐含)      |
+| 32  | **扩展广播态（Extended Advertising State）**：Primary + Secondary ADV                          | Part B, §4.4.2 (BLE 5.0)       |          ☐           |
+| 33  | **周期性广播（Periodic Advertising）**                                                        | Part B, §4.4.5 (BLE 5.0)       |          ☐           |
+|     | **§4.5 — 连接态**                                                                         |                                |                      |
+| 34  | Transmit Window（首次连接事件的接收窗口）                                                           | Part B, §4.5                   |       ☑ (4-1)        |
+| 35  | 连接事件（Connection Event）定义：Master 先发、Slave 后回                                            | Part B, §4.5.1                 |       ☑ (4-1)        |
+| 36  | 锚点（Anchor Point）定义与捕获（硬件 PPI 时间戳）                                                      | Part B, §4.5.1                 |     ☑ (4-1, 4-2)     |
+| 37  | connEventCounter（16-bit 回绕计数器）                                                         | Part B, §4.5.1                 |     ☑ (4-2, 8-1)     |
+| 38  | connInterval（连接间隔, 7.5 ms – 4 s）                                                       | Part B, §4.5.1                 |     ☑ (3-1, 4-1)     |
+| 39  | Supervision Timeout（超时断连, 100 ms – 32 s）                                               | Part B, §4.5.2                 |       ☑ (3-1)        |
+| 40  | Slave Latency（跳过连接事件的低功耗策略）                                                            | Part B, §4.5.2                 |       ☑ (7-1)        |
+| 41  | 关闭连接事件的规则（Closing a Connection Event）                                                  | Part B, §4.5.3                 |        ☑ 10-1        |
+| 42  | Transmit Window Narrowing（窗口收窄）                                                        | Part B, §4.5.4                 |          ☐           |
+| 43  | Window Widening（窗口拓宽, 晶振漂移补偿）                                                          | Part B, §4.5.7                 |       ☑ (5-1)        |
+| 44  | SCA（Sleep Clock Accuracy）等级与 ppm 换算                                                    | Part B, §4.5.7                 |       ☑ (5-1)        |
+| 45  | Channel Map（信道图）：5 字节 / 40-bit 标记可用信道                                                  | Part B, §4.5.8                 |       ☑ (4-3)        |
+| 46  | **CSA#1 跳频算法**（Hop increment, UnmappedCh mod 37, Remapping）                            | Part B, §4.5.8.1               |       ☑ (4-3)        |
+| 47  | **CSA#2 跳频算法**（基于 AES 的伪随机序列）                                                          | Part B, §4.5.8.2 (BLE 5.0)     |          ☐           |
+| 48  | SN/NESN：1-bit Stop-and-Wait ARQ 可靠传输                                                   | Part B, §4.5.9                 |       ☑ (6-1)        |
+| 49  | MD（More Data）位：同一连接事件内多包传输                                                             | Part B, §4.5.9.3               |       ☑ (6-1)        |
+| 50  | **Data Length Extension (DLE)**：单包最大 251 字节                                            | Part B, §4.5.10 (BLE 4.2)      |      ☑ (6-2 提及)      |
+|     | **§4.6 — 同步态（BLE 5.0）**                                                                |                                |                      |
+| 51  | **同步态（Synchronization State）**：周期性广播接收方的同步建立与维持                                        | Part B, §4.6 (BLE 5.0)         |          ☐           |
+|     | **§5 — LL Control Procedures**                                                         |                                |                      |
+| 52  | Instant 机制（16-bit connEventCounter 对齐生效）                                               | Part B, §5.1.1                 |       ☑ (8-1)        |
+| 53  | LL_CONNECTION_UPDATE_IND（连接参数在线更新）                                                     | Part B, §5.1.1                 |       ☑ (8-1)        |
+| 54  | LL_CHANNEL_MAP_IND（信道图在线更新）                                                            | Part B, §5.1.2                 |       ☑ (8-1)        |
+| 55  | LL_ENC_REQ / LL_ENC_RSP / LL_START_ENC（链路加密启动 AES-CCM）                                 | Part B, §5.1.3                 |       ☑ (13-1)       |
+| 56  | LL_PAUSE_ENC_REQ / LL_PAUSE_ENC_RSP（暂停加密）                                              | Part B, §5.1.3                 |          ☐           |
+| 57  | LL_FEATURE_REQ / LL_FEATURE_RSP（特性协商）                                                  | Part B, §5.1.4                 |      ☑ (6-1 提及)      |
+| 58  | LL_SLAVE_FEATURE_REQ（Slave 发起的特性协商，BLE 4.1+）                                           | Part B, §5.1.4                 |          ☐           |
+| 59  | LL_REJECT_IND / LL_REJECT_EXT_IND（过程拒绝）                                                | Part B, §5.1.5                 |       ☑ (11-1)       |
+| 60  | LL_TERMINATE_IND（链路层断连）                                                                | Part B, §5.1.6                 |       ☑ (11-1)       |
+| 61  | LL_CONNECTION_PARAM_REQ / RSP（Slave 发起参数更新）                                            | Part B, §5.1.7.1 (BLE 4.1)     |       ☑ (11-1)       |
+| 62  | LL_PING_REQ / LL_PING_RSP（认证超时监控）                                                      | Part B, §5.1.7.2 (BLE 4.1)     |          ☐           |
+| 63  | LL_VERSION_IND（版本交换）                                                                   | Part B, §5.1.8                 |      ☑ (6-1 提及)      |
+| 64  | LL_LENGTH_REQ / LL_LENGTH_RSP（数据长度协商, DLE）                                             | Part B, §5.1.9 (BLE 4.2)       |      ☑ (6-1 提及)      |
+| 65  | LL_PHY_REQ / LL_PHY_RSP / LL_PHY_UPDATE_IND（PHY 切换）                                    | Part B, §5.1.10 (BLE 5.0)      |          ☐           |
+| 66  | LL_MIN_USED_CHANNELS_IND（最少信道数指示）                                                      | Part B, §5.1.11 (BLE 5.0)      |          ☐           |
+|     | **Vol 6, Part B §6 — 链路层安全**                                                           |                                |                      |
+| 67  | 加密引擎（AES-128 CCM）与 MIC 生成/校验                                                           | Part B, §6                     |       ☑ (13-1)       |
+| 68  | 会话密钥分发（SKD / IV / LTK）                                                                 | Part B, §6                     |       ☑ (13-1)       |
+|     | **Vol 6, Part B §7 — LL 隐私（Privacy）**                                                  |                                |                      |
+| 69  | 可解析私有地址（RPA）生成与解析                                                                      | Part B, §7 (BLE 4.2)           |          ☐           |
+| 70  | 地址解析列表（Resolving List）与 Controller 端隐私                                                 | Part B, §7 (BLE 4.2)           |          ☐           |
+|     | **Vol 3, Part A — L2CAP**                                                              |                                |                      |
+| 71  | L2CAP CID 多路复用（ATT=0x0004, SMP=0x0006, Signaling=0x0005）                               | Vol 3, Part A, §2.1            |       ☑ (6-2)        |
+| 72  | L2CAP Basic Frame 分片与重组（LLID Start/Continue）                                           | Vol 3, Part A, §3              |       ☑ (6-2)        |
+| 73  | L2CAP Signaling Channel（参数更新请求等）                                                       | Vol 3, Part A, §4              |       ☑ (12-1)       |
+| 74  | LE Credit Based Flow Control（基于信用的流控，BLE 4.2+）                                         | Vol 3, Part A, §10.2 (BLE 4.2) |          ☐           |
+|     | **Vol 4, Part A — HCI 传输层**                                                            |                                |                      |
+| 75  | HCI 分层：Command / Event / ACL Data                                                      | Vol 4, Part A                  |       ☑ (9-1)        |
+| 76  | H4 传输协议（UART Packet Indicator）                                                         | Vol 4, Part A, §2              |       ☑ (9-1)        |
+| 77  | H5（Three-Wire）传输协议（可靠重传 + 链路管理）                                                        | Vol 4, Part D                  |          ☐           |
+| 78  | HCI USB 传输                                                                             | Vol 4, Part B                  |          ☐           |
+|     | **Vol 4, Part E — HCI 功能规范**                                                           |                                |                      |
+| 79  | HCI Command 格式（OpCode = OGF\|OCF, Param Length）                                        | Vol 4, Part E, §5              |       ☑ (9-1)        |
+| 80  | HCI ACL Data 格式（Handle, PB Flag, BC Flag）                                              | Vol 4, Part E, §5.4.2          |       ☑ (9-2)        |
+| 81  | HCI Event 格式（Command Complete, Command Status）                                         | Vol 4, Part E, §7.7            |       ☑ (9-1)        |
+| 82  | LE Meta Event（广播报告、连接完成等）                                                              | Vol 4, Part E, §7.7.65         |      ☑ (9-3 部分)      |
+| 83  | HCI ACL ↔ LL Data PDU 桥接（PB Flag ↔ LLID 映射）                                            | 实现层                            |       ☑ (9-2)        |
+| 84  | HCI 初始化序列（Reset → Read Version → LE Read Buffer Size → …）                              | Vol 4, Part E                  |       ☑ (9-3)        |
+| 85  | HCI LE 命令集（Set Advertising / Scan / Create Connection 等）                               | Vol 4, Part E, §7.8            |      ☑ (9-3 部分)      |
+|     | **Vol 3, Part H — SMP（安全管理协议）**                                                        |                                |                      |
+| 86  | SMP 运行在 L2CAP CID=0x0006 上，Pairing Feature Exchange                                    | Part H, §3.3                   |       ☑ (14-1)       |
+| 87  | LE Legacy Pairing：Confirm / Random 交换（TK=0，Just Works）                                 | Part H, §2.3.5.5               |       ☑ (14-1)       |
+| 88  | c1 / s1 密码学函数（基于 AES-128 的 confirm / STK 生成）                                           | Part H, §2.2                   |       ☑ (14-1)       |
+| 89  | 密钥分发阶段：Encryption Information + Master Identification（LTK/EDIV/Rand）                   | Part H, §3.6                   |       ☑ (14-1)       |
+| 90  | LE Secure Connections Pairing（基于 ECDH，BLE 4.2+）                                        | Part H, §2.3.5.6               |          ☐           |
+|     | **Vol 3, Part F — ATT（属性协议）**                                                          |                                |                      |
+| 91  | ATT 运行在 L2CAP CID=0x0004，客户端-服务端请求-应答模型                                                | Part F, §3                     |       ☑ (15-1)       |
+| 92  | Attribute：Handle / Type UUID / Permission / Value 四要素                                  | Part F, §3.1                   |       ☑ (15-1)       |
+| 93  | Exchange MTU Request/Response（默认 MTU=23）                                               | Part F, §3.4.2                 |       ☑ (15-1)       |
+| 94  | Find Information Request/Response（Descriptor 发现）                                       | Part F, §3.4.3                 |       ☑ (15-1)       |
+| 95  | Read By Type Request/Response（Characteristic 发现，uuid=0x2803）                           | Part F, §3.4.4                 |       ☑ (15-1)       |
+| 96  | Read By Group Type Request/Response（Service 发现，uuid=0x2800）                            | Part F, §3.4.10                |       ☑ (15-1)       |
+| 97  | Read Request/Response                                                                  | Part F, §3.4.4                 |       ☑ (15-1)       |
+| 98  | Write Request/Response：四级检查（Handle/权限/缓冲区/长度）                                          | Part F, §3.4.5                 |       ☑ (16-1)       |
+| 99  | Handle Value Notification（opcode=0x1B，无需 Client 确认）                                    | Part F, §3.4.7                 |       ☑ (16-1)       |
+| 100 | Handle Value Indication / Confirmation（需要 Client 确认）                                   | Part F, §3.4.7                 |          ☐           |
+| 101 | Error Response（opcode=0x01，含原始 opcode + handle + error code）                           | Part F, §3.4.1                 |       ☑ (15-1)       |
+|     | **Vol 3, Part G — GATT（通用属性规范）**                                                       |                                |                      |
+| 102 | GATT 层级：Service → Characteristic → Descriptor                                          | Part G, §3                     |       ☑ (16-1)       |
+| 103 | Primary Service Declaration（uuid=0x2800）与 Service handle range                         | Part G, §3.1                   |       ☑ (16-1)       |
+| 104 | Characteristic Declaration（uuid=0x2803）：Properties / Value Handle / UUID               | Part G, §3.3.1                 |       ☑ (16-1)       |
+| 105 | CCC Descriptor（uuid=0x2902）：Notification/Indication 开关                                 | Part G, §3.3.3.3               |       ☑ (16-1)       |
+| 106 | Characteristic Properties 位图（Read=0x02, Write=0x08, Notify=0x10）                       | Part G, §3.3.1.1               |       ☑ (16-1)       |
+| 107 | GATT Server 必备服务：GAP (0x1800) + GATT (0x1801)                                          | Part G, §7                     |    ☑ (15-1, 16-1)    |
+| 108 | Service Discovery 流程（Read By Group Type → Read By Type → Find Info）                    | Part G, §4.4                   |    ☑ (15-1, 16-1)    |
+|     | **实现层 — 调度与系统**                                                                        |                                |                      |
+| 86  | 精确锚点触发：Compare Match + PPI 硬件路径                                                        | 实现层                            |       ☑ (4-2)        |
+| 87  | 调度器冲突与优先级仲裁（固定优先级 / EDF）                                                               | 实现层                            |       ☑ (5-2)        |
+| 88  | WinOffset 前瞻规划（避免锚点冲突）                                                                 | Part B, §4.5                   |       ☑ (5-2)        |
 
 ---
 
